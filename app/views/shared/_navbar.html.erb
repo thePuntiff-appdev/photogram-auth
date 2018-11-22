@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+ <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container">
     <a class="navbar-brand" href="/">
       PhotogramAuth
@@ -10,50 +10,63 @@
 
     <div class="collapse navbar-collapse" id="collapsible-nav-links">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Resources
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a href="/comments" class="dropdown-item">
-              Comments
-            </a>
-            <a href="/likes" class="dropdown-item">
-              Likes
-            </a>
-            <a href="/photos" class="dropdown-item">
-              Photos
-            </a>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link" href="/users">
+            <i class="fas fa-users"></i>
+             <span class="hidden-sm">All Users</span></a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/photos">
+            <i class="fas fa-images"></i>
+            <span class="hidden-sm">All Posts</span></a>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/my_likes">
+            <i class="fas fa-star"></i>
+             <span class="hidden-sm">My Likes</span></a>
+        <% if user_signed_in? %>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/users/<%=current_user.id%>">
+                <i class="fas fa-user"></i>
+                <span class="hidden-sm">My Wall</span></a>
+            </li>
+        <%else%>
+        <%end%>
       </ul>
-      <ul class="navbar-nav">
-        <% if current_user.blank? %>
-          <li class="nav-item">
-            <a href="/users/sign_in" class="nav-link">
-              Sign in
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="/users/sign_up" class="nav-link">
-              Sign up
-            </a>
-          </li>
-        <% else %>
+      
+      <% if user_signed_in? %>
+        <ul class="navbar-nav">
           <li class="nav-item">
             <a href="/users/edit" class="nav-link">
-              Edit profile
+              <i class="fas fa-edit"></i>
+              <%=current_user.username%>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="/users/sign_out" data-method="delete" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i>
               Sign out
             </a>
           </li>
-        <% end %>
-      </ul>
+        </ul>
+      <% else %>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="/users/sign_in" class="nav-link">
+                Login
+              </a>
+            </li>
+  
+            <li class="nav-item">
+              <a href="/users/sign_up" class="nav-link">
+                Create account
+              </a>
+            </li>
+        </ul>
+      <% end %>
+
     </div> <!-- .navbar-collapse -->
   </div> <!-- .container -->
 </nav>

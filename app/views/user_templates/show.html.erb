@@ -1,14 +1,27 @@
 <div class="row">
   <div class="col-md-8 offset-md-2">
-    <a href="/photos/new" class="btn btn-primary btn-block">
-      <i class="fa fa-fw fa-plus"></i>
-
-      Add Photo
-    </a>
-
-    <hr>
+    <div class="jumbotron">
+      <h3>
+        <%= @user.username%>
+      </h3>
+    </div>
   </div>
 </div>
+
+<% if @user.id == current_user.id   %>
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <a href="/photos/new" class="btn btn-primary btn-block">
+        <i class="fa fa-fw fa-plus"></i>
+
+        Add Photo
+      </a>
+
+      <hr>
+    </div>
+  </div>
+<% else %>
+<% end %>
 
 
 <div class="container">
@@ -18,7 +31,7 @@
   </div>
 
 
-  <% @photos.each do |photo| %>
+  <% @user.photos.each do |photo| %>
 
     <div class="row mb-5">
       <div class="col-md-8 offset-md-2">
@@ -74,7 +87,6 @@
                 </a>
               <%end%>
 
-
               <ul class="list-unstyled pt-3">
                 <li class="media mb-2">
                   <div class="media-body">
@@ -94,8 +106,11 @@
                     <div class="media-body">
                       <h6>
                         <a href="/users/<%=comment.user_id%>"><%= User.find(comment.user_id).username%></a>
-                        <small> <%=time_ago_in_words(comment.created_at)%> ago </small>
+                        <small>
+                          <%=time_ago_in_words(comment.created_at)%> ago
+                        </small>
                       </h6>
+
                       <%=comment.body%>
                     </div>
                     <!-- media-body -->
@@ -155,6 +170,7 @@
                 <!-- btn-group btn-group-justified -->
               <% else %>
               <% end %>
+              <!-- btn-group btn-group-justified -->
             </div>
           </div>
           <!-- card-body -->
@@ -165,3 +181,5 @@
     </div>
     <!-- row -->
   <% end %>
+
+</div>

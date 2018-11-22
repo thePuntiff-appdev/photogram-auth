@@ -1,0 +1,160 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+    </div>
+  </div>
+
+
+  <% @likes.each do |like| %>
+
+    <div class="row mb-5">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">
+              <a href="/users/<%= Photo.find(like.photo_id).user_id %>"> <%= User.find(Photo.find(like.photo_id).user_id).username %>  </a>
+              <small><%=time_ago_in_words(Photo.find(like.photo_id).created_at)%> ago </small>
+            </h4>
+          </div>
+
+          <div class="card-body">
+            <a href="/photos/<%=Photo.find(like.photo_id)%>">
+              <img src="<%=Photo.find(like.photo_id).image%>" class="img-fluid">
+            </a>
+
+            <div>
+
+              <% Photo.find(like.photo_id).likes.each do |like| %>
+                <%= User.find(like.user_id).username%>
+              <% end %>
+
+
+              <% Photo.find(like.photo_id).likes.each do |like| %>
+                <% if like.user_id == current_user.id   %>
+                  <a href="/delete_like/<%=like.id%>" class="btn btn-link pull-right">
+                    <i class="fas fa-heart"></i> Unlike
+                  </a>
+                <% else %>
+                <% end %>
+              <% end %>
+
+              <form action="/create_like" method="post">
+                <input type="hidden" name="photo_id" value="<%= like.photo_id %>">
+                <input type="hidden" name="user_id" value="<%= current_user.id %>">
+                <button class="btn btn-link pull-right">
+                  <i class="far fa-heart"></i>
+                  Like
+                </button>
+              </form>
+
+              <form action="/create_like" method="post">
+                <!-- Hidden input for authenticity token to protect from forgery -->
+                <input name="authenticity_token" type="hidden" value="mOpnPxAgl3idWQ4i3nsiulURWEsQtZJ3oJ8v9m+XRZP6jACwXZHlGH/ucN8VOm769Z/E0fSBVngd6unmO7hapw==">
+
+                <input type="hidden" name="photo_id" value="<%=like.photo_id%>">
+
+                <input type="hidden" name="user_id" value="<%=current_user%>">
+
+                <!--Need to fix this to show users-->
+                <small class="text-muted">be the first to like this</small>
+
+                <button class="btn btn-link pull-right">
+                  <i class="far fa-heart"></i>
+
+                  Like
+                </button>
+              </form>
+
+
+
+              <ul class="list-unstyled pt-3">
+                <li class="media mb-2">
+                  <div class="media-body">
+                    <h6>
+                      <a href="/users/<%=Photo.find(like.photo_id).user_id%>"><%= User.find(Photo.find(like.photo_id).user_id).username%></a>
+                      <small>
+                        <%=time_ago_in_words(Photo.find(like.photo_id).created_at)%> ago
+                      </small>
+                    </h6>
+
+                    <%=Photo.find(like.photo_id).caption%>
+                  </div>
+                   <!-- media-body -->
+                </li>
+                
+                <% Photo.find(like.photo_id).comments.each do |comment| %>
+                  <li class="media mb-2">
+                    <div class="media-body">
+                      <h6>
+                        <a href="/users/<%=comment.user_id%>"><%= User.find(comment.user_id).username%></a>
+                        <small>
+                          <%=time_ago_in_words(comment.created_at)%> ago
+                        </small>
+                      </h6>
+
+                      <%=comment.body%>
+                    </div>
+                     <!-- media-body -->
+                  </li>
+                <% end %>
+
+                <li class="media">
+                  <div class="media-body">
+                    <form action="/create_comment" method="post" class="pt-4">
+                      <!-- Hidden input for authenticity token to protect from forgery -->
+                      <input name="authenticity_token" type="hidden" value="1+dN4kYNAwaB527Jia+CCVi8gG/1jhvuT8vdLwIV9dG1gSptC7xxZmNQEDRC7s5J+DIc9RG63+Hyvhs/Vjrq5Q==">
+
+                      <input type="hidden" name="photo_id" value="<%=like.photo_id%>">
+
+                      <input type="hidden" name="user_id" value="<%=current_user%>">
+
+                      <!-- Label and input for body -->
+                      <div class="form-group">
+                        <label for="body" class="sr-only">
+                          Body
+                        </label>
+
+                        <div class="input-group">
+                          <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+
+                          <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <i class="far fa-comment"></i>
+
+                              Add Comment
+                            </button>
+                          </span>
+                        </div>
+                         <!-- input-group -->
+                      </div>
+                        <!-- form-group -->
+                    </form>
+                  </div>
+                   <!-- media-body -->
+                </li>
+              </ul>
+
+              <div class="btn-group d-flex" role="group">
+                <a href="/photos/<%=like.photo_id%>/edit" class="btn btn-warning w-100">
+                  <i class="fas fa-edit"></i>
+
+                  Edit
+                </a>
+
+                <a href="/delete_photo/<%=like.photo_id%>" class="btn btn-danger w-100" rel="nofollow">
+                  <i class="fas fa-trash"></i>
+
+                  Delete
+                </a>
+              </div>
+               <!-- btn-group btn-group-justified -->
+            </div>
+          </div>
+           <!-- card-body -->
+        </div>
+         <!-- card  -->
+      </div>
+       <!-- col-md-8 offset-md-2 -->
+    </div>
+     <!-- row -->
+  <% end %>
